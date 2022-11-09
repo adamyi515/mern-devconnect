@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require('../../controller/users');
+const { registerUser } = require('../../controller/auth');
 
 // @desc    Test route
 // @route   GET /api/users

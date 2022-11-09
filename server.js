@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB.
 connectDB();
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded( { extended: false } ));
+
 // Defined routes.
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
