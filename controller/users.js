@@ -49,34 +49,72 @@ const registerUser = async (req, res) => {
         });
 
         // Return jwt
-        const payload = {
-            user: {
-                id: newUser._id
-            }
-        }
-        const token = jwt.sign(payload, SECRET, {
-            expiresIn: 360000
-        });
+        const token = generateToken(newUser);
 
-        const newUserData = {
-            name: newUser.name,
-            email: newUser.email,
-            avatar: newUser.avatar,
-            token: token
-        }
+        // const newUserData = {
+        //     name: newUser.name,
+        //     email: newUser.email,
+        //     avatar: newUser.avatar,
+        //     token: token
+        // }
 
-
-        res.status(200).json(newUserData)
+        res.status(200).json(token)
         
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
     }
+}
 
+const loginUser = async (req, res) => {
+    // Validate user's data being sent to endpoint.
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            errors: errors.array()
+        })
+    }
+    const { email, password } = req.body;
+
+    try {
+        // Check if user is even in the system.
+        const foundUser = await User.findOne({ email });
+        if(!foundUser){
+            return res.status(404).json({
+                msg: 'User not found.'
+            });
+        }
+
+        // If user is found then compare the passwords. If password is correct, return a new token.
+        if(await bcrypt.compare(password, foundUser.password)){
+            const token = generateToken(foundUser);
+            return res.status(200).json(token);
+        } 
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
 
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// Private Method
+const generateToken = (user) => {
+    const payload = {
+        user: {
+            id: user._id
+        }
+    };
+    const token = jwt.sign(payload, SECRET, {
+        expiresIn: 360000
+    });
+
+    return token;
+}
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 }

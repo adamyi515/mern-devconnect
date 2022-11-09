@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require('../../controller/auth');
+const { test } = require('../../controller/auth');
+const { authRoute } = require('../../middleware/auth');
 
 // @desc    Test route
-// @route   GET /api/users
-// @access  PUBLIC
-router.get('/', registerUser);
+// @route   POST /api/users
+// @access  PRIVATE
+router.get('/', authRoute, test);
 
 
 

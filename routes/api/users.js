@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
-const { registerUser } = require('../../controller/users');
+const { authRoute } = require('../../middleware/auth');
+const { check } = require('express-validator/check');
+const { registerUser, loginUser } = require('../../controller/users');
 
 // @desc    Test route
 // @route   GET /api/users
@@ -13,6 +14,10 @@ router.post('/', [
 ], registerUser);
 
 
+router.post('/login', [
+    check('email', 'Email is required.').isEmail(),
+    check('password', 'Please enter password with 6 character or more.').isLength({ min: 6})
+], loginUser);
 
 
 
