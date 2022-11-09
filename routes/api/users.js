@@ -16,7 +16,7 @@ router.post('/', [
 
 router.post('/login', [
     check('email', 'Email is required.').isEmail(),
-    check('password', 'Please enter password with 6 character or more.').isLength({ min: 6})
+    check('password', 'Password is required.').exists()
 ], loginUser);
 
 

@@ -11,7 +11,6 @@ const authRoute = (req, res, next) => {
         })
     }
 
-
     // Verify the token is valid.
     try {
         const decodedToken = jwt.verify(getToken, SECRET);
