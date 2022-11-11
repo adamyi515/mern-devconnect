@@ -51,13 +51,6 @@ const registerUser = async (req, res) => {
         // Return jwt
         const token = generateToken(newUser);
 
-        // const newUserData = {
-        //     name: newUser.name,
-        //     email: newUser.email,
-        //     avatar: newUser.avatar,
-        //     token: token
-        // }
-
         res.status(200).json(token)
         
     } catch (error) {
@@ -81,7 +74,7 @@ const loginUser = async (req, res) => {
         const foundUser = await User.findOne({ email });
         if(!foundUser){
             return res.status(404).json({
-                msg: 'Invalid credentials.'
+                msg: 'User not registered.'
             });
         }
 
@@ -89,7 +82,11 @@ const loginUser = async (req, res) => {
         if(await bcrypt.compare(password, foundUser.password)){
             const token = generateToken(foundUser);
             return res.status(200).json(token);
-        } 
+        } else {
+            return res.status(404).json({
+                msg: 'Invalid credentials'
+            })
+        }
 
     } catch (error) {
         console.error(error);
