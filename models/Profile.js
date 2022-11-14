@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const profileSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     },
     company: {
         type: String
@@ -18,7 +18,7 @@ const profileSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    skill: {
+    skills: {
         type: [String],
         required: true
     },
